@@ -59,7 +59,16 @@ public class Texture
             return null;
         }
     }
-    
+
+    public static Texture loadTextureFromBitmap(Bitmap bitmap)
+    {
+        int[] data = new int[bitmap.getWidth() * bitmap.getHeight()];
+        bitmap.getPixels(data, 0, bitmap.getWidth(), 0, 0,
+                bitmap.getWidth(), bitmap.getHeight());
+
+        return loadTextureFromIntBuffer(data, bitmap.getWidth(),
+                bitmap.getHeight());
+    }
     
     public static Texture loadTextureFromIntBuffer(int[] data, int width,
         int height)
