@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
+import android.graphics.Rect;
 import android.webkit.WebView;
 
 import java.net.URL;
@@ -11,17 +12,20 @@ import java.net.URL;
 public class OffscreenImage
 {
     private URL mUrl;
-    final WebView mView;// = new WebView(this);
+   // final WebView mView;// = new WebView(this);
 
-    final float scale = 2.0f;
+    final float scale = 0.50f;
     final int contentWidth = 240;
     Bitmap mBitmap;
+    FinishedLoading mFinishedLoading;
 
     @SuppressWarnings("deprecation")
-    public OffscreenImage(URL url, Activity activity)
+    public OffscreenImage(URL url, Activity activity, FinishedLoading finishedLoading)
     {
         mUrl = url;
-        mView = new WebView(activity);
+        mFinishedLoading = finishedLoading;
+
+        final WebView mView = new WebView(activity);
         mView.setPictureListener(new WebView.PictureListener()
          {
              @Override
@@ -33,6 +37,7 @@ public class OffscreenImage
                     final int width = Math.round(contentWidth * scale);
                     final int height = Math.round(mView.getContentHeight() * scale);
                     mBitmap = getBitmap(mView, width, height);
+                    mFinishedLoading.GetBitmap(mBitmap);
                 }
              }
          });
@@ -51,8 +56,13 @@ public class OffscreenImage
         return bitmap;
     }
 
-    public Bitmap getmBitmap()
+//    public Bitmap getmBitmap()
+//    {
+//        return mBitmap;
+//    }
+
+    public interface FinishedLoading
     {
-        return mBitmap;
+        public void GetBitmap(Bitmap bitmap);
     }
 }

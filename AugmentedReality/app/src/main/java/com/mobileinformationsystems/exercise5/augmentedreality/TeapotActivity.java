@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 
+import com.mobileinformationsystems.exercise5.augmentedreality.SampleApplication.OffscreenImage;
 import com.qualcomm.vuforia.CameraDevice;
 import com.qualcomm.vuforia.DataSet;
 import com.qualcomm.vuforia.ObjectTracker;
@@ -35,6 +37,7 @@ import com.mobileinformationsystems.exercise5.augmentedreality.SampleApplication
 import com.mobileinformationsystems.exercise5.augmentedreality.SampleApplication.utils.SampleApplicationGLView;
 import com.mobileinformationsystems.exercise5.augmentedreality.SampleApplication.utils.Texture;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -137,7 +140,23 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
     {
         mTextures.add(Texture.loadTextureFromApk("TextureTeapotBrass.png", getAssets()));
         mTextures.add(Texture.loadTextureFromApk("TextureTeapotBlue.png", getAssets()));
-        mTextures.add(Texture.loadTextureFromApk("TextureTeapotRed.png", getAssets()));
+      //  mTextures.add(Texture.loadTextureFromApk("TextureTeapotRed.png", getAssets()));
+        try
+        {
+            OffscreenImage test = new OffscreenImage(new URL("http://www.uni-weimar.de/de/medien/start/"), this,
+                    new OffscreenImage.FinishedLoading()
+                    {
+                        @Override
+                        public void GetBitmap(Bitmap bitmap)
+                        {
+                            mTextures.add(Texture.loadTextureFromBitmap(bitmap));
+                        }
+                    });
+        }
+        catch (java.net.MalformedURLException e)
+        {
+            Log.e(LOGTAG, e.getMessage());
+        }
     }
 
     // Called when the activity will start interacting with the user.
