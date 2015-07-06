@@ -15,19 +15,21 @@ public class OffscreenImage
 {
     private static final String LOGTAG = "OffscreenImage";
 
-    final WebView mView;// = new WebView(this);
+    WebView mView;// = new WebView(this);
 
     final float scale = 0.25f;
     final int contentWidth = 240;
  //   Bitmap mBitmap;
     FinishedLoading mFinishedLoading;
     Queue<String> mUrlQueue = new LinkedList<String>();
+    Activity mActivity;
 
     @SuppressWarnings("deprecation")
     public OffscreenImage(Activity activity, FinishedLoading finishedLoading)
     {
         mFinishedLoading = finishedLoading;
-        mView = new WebView(activity);
+
+        mActivity = activity;
     }
 
     @SuppressWarnings("deprecation")
@@ -46,6 +48,8 @@ public class OffscreenImage
                     final int height = Math.round(mView.getContentHeight() * scale);
                     Bitmap bitmap = getBitmap(mView, width, height);
                     mFinishedLoading.GetBitmap(bitmap);
+                    bitmap.recycle();
+                    mView = null;
                     LoadPages();
                 }
             }
@@ -64,6 +68,7 @@ public class OffscreenImage
     {
         if(mUrlQueue.size() > 0)
         {
+            mView = new WebView(mActivity);
             mView.setPictureListener(createListener());
             String url = mUrlQueue.poll();
             Log.v(LOGTAG, "loading::" + url);
@@ -72,8 +77,6 @@ public class OffscreenImage
 
             mView.layout(0, 0, 1, 1);
         }
-        else
-            mView.setPictureListener(null);
     }
 
     private Bitmap getBitmap(final WebView view, final int width, final int height)

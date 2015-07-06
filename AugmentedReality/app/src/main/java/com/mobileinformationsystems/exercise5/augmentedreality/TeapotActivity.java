@@ -102,10 +102,9 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
     //    mDatasetStrings.add("exericse5.xml");
         mDatasetStrings.add("bauhaus.xml");
 
-        vuforiaAppSession
-                .initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+     //   vuforiaAppSession.initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mGestureDetector = new GestureDetector(this, new GestureListener());
+     //   mGestureDetector = new GestureDetector(this, new GestureListener());
 
         // Load any sample specific textures:
         mTextures = new Vector<Texture>();
@@ -114,6 +113,13 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
 
         mIsDroidDevice = android.os.Build.MODEL.toLowerCase().startsWith(
                 "droid");
+    }
+
+    private void inVuforiaStuff()
+    {
+        vuforiaAppSession.initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        mGestureDetector = new GestureDetector(this, new GestureListener());
     }
 
     // Process Single Tap event to trigger autofocus
@@ -164,12 +170,14 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
                     {
                         mTextures.add(Texture.loadTextureFromBitmap(bitmap));
                         mTextureCount++;
+                        if(mTextureCount == 8)
+                            inVuforiaStuff();
                     }
                 });
+        offscreenImage.AddUrl(Atelier_Url);
         offscreenImage.AddUrl(Medien_Url);
         offscreenImage.AddUrl(Mensa_Url);
         offscreenImage.AddUrl(Florian_Url);
-        offscreenImage.AddUrl(Atelier_Url);
         offscreenImage.AddUrl(DBL_Url);
         offscreenImage.LoadPages();
     }

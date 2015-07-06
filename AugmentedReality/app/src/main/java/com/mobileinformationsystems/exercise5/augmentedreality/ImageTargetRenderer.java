@@ -242,11 +242,11 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
             else if(trackable.getName().equalsIgnoreCase("tree"))
                 textureIndex = 2;
             else if(trackable.getName().equalsIgnoreCase("Medien"))
-                textureIndex = 3;
-            else if(trackable.getName().equalsIgnoreCase("Mensa"))
                 textureIndex = 4;
-            else if(trackable.getName().equalsIgnoreCase("Atelier"))
+            else if(trackable.getName().equalsIgnoreCase("Mensa"))
                 textureIndex = 5;
+            else if(trackable.getName().equalsIgnoreCase("Atelier"))
+                textureIndex = 3;
             else if(trackable.getName().equalsIgnoreCase("Florian"))
                 textureIndex = 6;
             else
@@ -359,8 +359,6 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     
     public void setTextures(Vector<Texture> textures)
     {
-        if(mTextures != null)
-            mTextures.clear();
         mTextures = textures;
         
     }
