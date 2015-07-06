@@ -76,8 +76,20 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
 
     // Alert Dialog used to display SDK errors
     private AlertDialog mErrorDialog;
+    private int mTextureCount = 0;
 
     boolean mIsDroidDevice = false;
+
+    OffscreenImage offscreenImage;
+    private static final String
+            Medien_Url = "http://www.uni-weimar.de/de/medien/start/",
+            Mensa_Url = "http://www.stw-thueringen.de/english/dining-halls/facilities/weimar/cafeteria-mensa-am-park.html",
+            Florian_Url = "https://www.uni-weimar.de/de/medien/professuren/mobile-media/",
+            Atelier_Url = "http://www.uni-weimar.de/en/university/profile/bauhausatelier/",
+            DBL_Url = "https://www.uni-weimar.de/de/universitaet/profil/veranstaltungen/veranstaltungen-2012/grundsteinlegung-digital-bauhaus-lab/";
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -87,7 +99,8 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
         vuforiaAppSession = new SampleApplicationSession(this);
 
         startLoadingAnimation();
-        mDatasetStrings.add("exericse5.xml");
+    //    mDatasetStrings.add("exericse5.xml");
+        mDatasetStrings.add("bauhaus.xml");
 
         vuforiaAppSession
                 .initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -96,6 +109,7 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
 
         // Load any sample specific textures:
         mTextures = new Vector<Texture>();
+
         loadTextures();
 
         mIsDroidDevice = android.os.Build.MODEL.toLowerCase().startsWith(
@@ -140,23 +154,29 @@ public class TeapotActivity extends Activity implements SampleApplicationControl
     {
         mTextures.add(Texture.loadTextureFromApk("TextureTeapotBrass.png", getAssets()));
         mTextures.add(Texture.loadTextureFromApk("TextureTeapotBlue.png", getAssets()));
-      //  mTextures.add(Texture.loadTextureFromApk("TextureTeapotRed.png", getAssets()));
-        try
-        {
-            OffscreenImage test = new OffscreenImage(new URL("http://www.uni-weimar.de/de/medien/start/"), this,
-                    new OffscreenImage.FinishedLoading()
+        mTextures.add(Texture.loadTextureFromApk("TextureTeapotRed.png", getAssets()));
+        mTextureCount = 3;
+        offscreenImage = new OffscreenImage(this,
+                new OffscreenImage.FinishedLoading()
+                {
+                    @Override
+                    public void GetBitmap(Bitmap bitmap)
                     {
-                        @Override
-                        public void GetBitmap(Bitmap bitmap)
-                        {
-                            mTextures.add(Texture.loadTextureFromBitmap(bitmap));
-                        }
-                    });
-        }
-        catch (java.net.MalformedURLException e)
-        {
-            Log.e(LOGTAG, e.getMessage());
-        }
+                        mTextures.add(Texture.loadTextureFromBitmap(bitmap));
+                        mTextureCount++;
+                    }
+                });
+        offscreenImage.AddUrl(Medien_Url);
+        offscreenImage.AddUrl(Mensa_Url);
+        offscreenImage.AddUrl(Florian_Url);
+        offscreenImage.AddUrl(Atelier_Url);
+        offscreenImage.AddUrl(DBL_Url);
+        offscreenImage.LoadPages();
+    }
+
+    public int getmTextureCount()
+    {
+        return mTextureCount;
     }
 
     // Called when the activity will start interacting with the user.

@@ -185,19 +185,19 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
         }
         
         shaderProgramID = SampleUtils.createProgramFromShaderSrc(
-            CubeShaders.CUBE_MESH_VERTEX_SHADER,
-            CubeShaders.CUBE_MESH_FRAGMENT_SHADER);
+                CubeShaders.CUBE_MESH_VERTEX_SHADER,
+                CubeShaders.CUBE_MESH_FRAGMENT_SHADER);
         
         vertexHandle = GLES20.glGetAttribLocation(shaderProgramID,
                 "vertexPosition");
         normalHandle = GLES20.glGetAttribLocation(shaderProgramID,
-            "vertexNormal");
+                "vertexNormal");
         textureCoordHandle = GLES20.glGetAttribLocation(shaderProgramID,
-            "vertexTexCoord");
+                "vertexTexCoord");
         mvpMatrixHandle = GLES20.glGetUniformLocation(shaderProgramID,
                 "modelViewProjectionMatrix");
         texSampler2DHandle = GLES20.glGetUniformLocation(shaderProgramID,
-            "texSampler2D");
+                "texSampler2D");
         
         // Hide the Loading Dialog
         mActivity.loadingDialogHandler.sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
@@ -233,10 +233,29 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
             Matrix44F modelViewMatrix_Vuforia = Tool
                 .convertPose2GLMatrix(result.getPose());
             float[] modelViewMatrix = modelViewMatrix_Vuforia.getData();
-            
-            int textureIndex = trackable.getName().equalsIgnoreCase("cat") ? 0 : 1;
-            textureIndex = trackable.getName().equalsIgnoreCase("tree") ? 2 : textureIndex;
-            boolean isTeapot = textureIndex >= 0 && textureIndex <= 1;
+
+            int textureIndex = 0;
+            if(trackable.getName().equalsIgnoreCase("cat"))
+                textureIndex = 0;
+            else if(trackable.getName().equalsIgnoreCase("city"))
+                textureIndex = 1;
+            else if(trackable.getName().equalsIgnoreCase("tree"))
+                textureIndex = 2;
+            else if(trackable.getName().equalsIgnoreCase("Medien"))
+                textureIndex = 3;
+            else if(trackable.getName().equalsIgnoreCase("Mensa"))
+                textureIndex = 4;
+            else if(trackable.getName().equalsIgnoreCase("Atelier"))
+                textureIndex = 5;
+            else if(trackable.getName().equalsIgnoreCase("Florian"))
+                textureIndex = 6;
+            else
+                textureIndex = 7;
+
+            if(textureIndex > mActivity.getmTextureCount())
+                break;
+
+            boolean isTeapot = textureIndex <= 2;
             
             // deal with the modelview and projection matrices
             float[] modelViewProjection = new float[16];
@@ -340,6 +359,8 @@ public class ImageTargetRenderer implements GLSurfaceView.Renderer
     
     public void setTextures(Vector<Texture> textures)
     {
+        if(mTextures != null)
+            mTextures.clear();
         mTextures = textures;
         
     }
