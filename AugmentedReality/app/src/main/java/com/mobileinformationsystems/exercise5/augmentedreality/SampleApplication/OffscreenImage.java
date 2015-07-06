@@ -17,8 +17,8 @@ public class OffscreenImage
 
     WebView mView;// = new WebView(this);
 
-    final float scale = 0.25f;
-    final int contentWidth = 240;
+    final float scale = 1.0f;
+    final int contentWidth = 247;
  //   Bitmap mBitmap;
     FinishedLoading mFinishedLoading;
     Queue<String> mUrlQueue = new LinkedList<String>();
